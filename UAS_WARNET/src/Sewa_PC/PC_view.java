@@ -1,0 +1,651 @@
+package Sewa_PC;
+
+import javax.swing.JOptionPane;
+import Menu.menu;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+
+/**
+ *
+ * @author Rizky
+ */
+public class PC_view extends javax.swing.JFrame{
+
+    private PC_CRUD pci;
+    
+    public PC_view() throws ClassNotFoundException, SQLException {
+        initComponents();
+        pci = new PC_CRUD();
+        clear();
+    }
+
+    // ****** HELPER ****** //
+    
+    // METHOD UNTUK MEMBERSIHKAN INPUTAN PADA GUI
+    private void clear() {
+        tUsername.requestFocus();
+        tUsername.setText("");
+        tWaktu.setText("");
+        tTotal.setText("");
+        cbPC.setSelectedIndex(0);
+        pci.read(tabelPC);
+    }
+    
+    // METHOD UNTUK CEK DATA UDH DI ISI APA BELUM
+    private boolean check() {
+        if (tUsername.getText().isEmpty()
+                || tWaktu.getText().isEmpty()
+                || tBiaya.getText().isEmpty()
+                || tTotal.getText().isEmpty()
+                || cbPC.getSelectedIndex() == 0) {
+            return false;
+        }
+        return true;
+    }
+    
+     private boolean tambah = true;
+     
+     
+    // METHOD UNTUK CEK BUTON SIMPAN APAKAH BUAT UPDATE  ATAU TAMABH DATA
+    private void save() {
+        if (check()) {
+            if (tambah) {
+                // TAMBAH DATA
+                PC pc = new PC();
+                pc.setUsername(tUsername.getText().toString());
+                pc.setPc(cbPC.getSelectedItem().toString());
+                pc.setBiaya(Integer.valueOf((tBiaya.getText().toString())));
+                pc.setWaktu(Integer.valueOf(tWaktu.getText().toString()));
+                pc.setTotal(Integer.valueOf(tTotal.getText().toString()));
+                
+                    pci.create(pc.getUsername(),pc.getPc(),pc.getBiaya(),pc.getWaktu(),pc.getTotal());
+                    clear();
+                
+            } else {
+                // UBAH DATA
+                PC pc = new PC();
+                String name = tUsername.getText();
+                String pece = cbPC.getSelectedItem().toString();
+                String biaya = tBiaya.getText().toString();
+                String waktu = tWaktu.getText().toString();
+                String total = tTotal.getText().toString();
+
+                pc.setUsername(name);
+                pc.setPc(pece);
+                pc.setBiaya(Integer.valueOf(biaya));
+                pc.setWaktu(Integer.valueOf(waktu));
+                pc.setTotal(Integer.valueOf(total));
+                
+                int row = tabelPC.getSelectedRow();
+                String id = tabelPC.getValueAt(row, 0).toString();
+                pci.update(pc.getUsername(),pc.getPc(),pc.getBiaya(),pc.getWaktu(),pc.getTotal(),Integer.parseInt(id));
+                        
+                tambah = true;
+                clear();
+            }
+            tBiaya.setText("");
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Data belum diisi!");
+        }
+    }
+    
+    // METHOD UNTUK LOAD DATA YAITU MENARU ISI DATA KE INPUTAN
+    private void loadData() {
+        int select = tabelPC.getSelectedRowCount();
+        if (select > 0) {
+            int pilihan = JOptionPane.NO_OPTION;
+            pilihan = JOptionPane.showConfirmDialog(rootPane, "Ingin mengubah data?", "INFO", JOptionPane.YES_NO_OPTION);
+            if (pilihan == JOptionPane.YES_OPTION) {
+                int row = tabelPC.getSelectedRow();
+                tUsername.setText(tabelPC.getValueAt(row, 1).toString());
+                cbPC.setSelectedItem(tabelPC.getValueAt(row, 2).toString());
+                tBiaya.setText(tabelPC.getValueAt(row, 3).toString());
+                tWaktu.setText(tabelPC.getValueAt(row, 4).toString());
+                tTotal.setText(tabelPC.getValueAt(row, 5).toString());
+
+                tambah = false;
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Data belum dipilih!");
+        }
+    }
+    
+    // METHOD MENGHITUNG TOTAL BIAYA 
+    private void total() {
+        int waktu = Integer.valueOf(tWaktu.getText());
+        int biaya = Integer.valueOf(tBiaya.getText());
+        
+        if(tWaktu.getText().matches("[0-9]+")){
+            int total = biaya * waktu;
+            tTotal.setText(String.valueOf(total));
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Masukan Waktu Dengan Benar!");
+        }
+    }
+    
+    // METHOD UNTUK MENENTUKAN BIAYA
+    private void biaya() {
+        if (cbPC.getSelectedIndex() < 6) {
+            tBiaya.setText(String.valueOf(3000));
+        } else {
+            tBiaya.setText(String.valueOf(5000));
+        }
+    }
+    // ******* END OF HELPER ****** //
+    
+
+    /**
+     * Creates new form PC
+     */
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jLabel12 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelPC = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        tWaktu = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        btBack = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        tBiaya = new javax.swing.JTextField();
+        cbPC = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        tUsername = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        tTotal = new javax.swing.JTextField();
+        btEdit = new javax.swing.JButton();
+        btSimpan = new javax.swing.JButton();
+        btHapus = new javax.swing.JButton();
+        bg = new javax.swing.JLabel();
+
+        jPasswordField1.setText("jPasswordField1");
+
+        jLabel12.setText("jLabel12");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(159, 115, 171));
+        jPanel2.setLayout(null);
+
+        jPanel1.setBackground(new java.awt.Color(98, 79, 130));
+
+        jLabel1.setFont(new java.awt.Font("Athena Rustic", 1, 28)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 171, 3));
+        jLabel1.setText("MENU PENYEWAAN KOMPUTER ( PC )");
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/Logo_sewapc.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 167, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel1);
+        jPanel1.setBounds(0, 0, 728, 86);
+
+        tabelPC = new javax.swing.JTable(){
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        tabelPC.getTableHeader().setReorderingAllowed(false);
+        tabelPC.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "NO", "Username", "PC", "Biaya per jam", "Durasi ( *jam )", "Total bayar"
+            }
+        ));
+        tabelPC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelPCMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabelPC);
+
+        jPanel2.add(jScrollPane1);
+        jScrollPane1.setBounds(10, 350, 700, 130);
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Myanmar Text", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("*jam");
+        jPanel2.add(jLabel3);
+        jLabel3.setBounds(260, 210, 31, 28);
+
+        tWaktu.setBackground(new java.awt.Color(241, 241, 241));
+        tWaktu.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        tWaktu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tWaktuActionPerformed(evt);
+            }
+        });
+        tWaktu.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tWaktuKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tWaktuKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tWaktuKeyTyped(evt);
+            }
+        });
+        jPanel2.add(tWaktu);
+        tWaktu.setBounds(191, 213, 60, 22);
+
+        jPanel3.setBackground(new java.awt.Color(222, 245, 229));
+
+        jLabel2.setFont(new java.awt.Font("Harry P", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 102, 0));
+        jLabel2.setText("WARNET LOABAHU");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 102));
+        jLabel5.setText("*PC 1-5  (Reguler) => Rp.3000/jam");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 102));
+        jLabel6.setText("*PC 6-10 (VIP)      => Rp.5000/jam");
+
+        btBack.setBackground(new java.awt.Color(65, 99, 136));
+        btBack.setFont(new java.awt.Font("Athena Rustic", 1, 18)); // NOI18N
+        btBack.setForeground(new java.awt.Color(255, 255, 255));
+        btBack.setText("LOGOUT ");
+        btBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btBackActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel2))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(btBack, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(52, 52, 52))))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addComponent(btBack, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+        );
+
+        jPanel2.add(jPanel3);
+        jPanel3.setBounds(460, 100, 245, 212);
+
+        jLabel7.setFont(new java.awt.Font("Myanmar Text", 1, 13)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Username");
+        jPanel2.add(jLabel7);
+        jLabel7.setBounds(55, 106, 61, 25);
+
+        jLabel8.setFont(new java.awt.Font("Myanmar Text", 1, 13)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Pilih Komputer");
+        jPanel2.add(jLabel8);
+        jLabel8.setBounds(55, 141, 93, 25);
+
+        jLabel9.setFont(new java.awt.Font("Myanmar Text", 1, 13)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("Lama Penggunaan ");
+        jPanel2.add(jLabel9);
+        jLabel9.setBounds(55, 213, 118, 25);
+
+        tBiaya.setEditable(false);
+        tBiaya.setBackground(new java.awt.Color(241, 241, 241));
+        tBiaya.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tBiayaActionPerformed(evt);
+            }
+        });
+        jPanel2.add(tBiaya);
+        tBiaya.setBounds(191, 180, 180, 22);
+
+        cbPC.setBackground(new java.awt.Color(241, 241, 241));
+        cbPC.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih PC -", "Komputer / PC 1", "Komputer / PC 2", "Komputer / PC 3", "Komputer / PC 4", "Komputer / PC 5", "Komputer / PC 6", "Komputer / PC 7", "Komputer / PC 8", "Komputer / PC 9", "Komputer / PC 10" }));
+        cbPC.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbPCItemStateChanged(evt);
+            }
+        });
+        cbPC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPCActionPerformed(evt);
+            }
+        });
+        jPanel2.add(cbPC);
+        cbPC.setBounds(191, 139, 180, 22);
+
+        jLabel10.setFont(new java.awt.Font("Myanmar Text", 1, 13)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Biaya per jam *Rp");
+        jPanel2.add(jLabel10);
+        jLabel10.setBounds(55, 182, 110, 25);
+
+        tUsername.setBackground(new java.awt.Color(241, 241, 241));
+        tUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tUsernameActionPerformed(evt);
+            }
+        });
+        tUsername.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tUsernameKeyPressed(evt);
+            }
+        });
+        jPanel2.add(tUsername);
+        tUsername.setBounds(190, 100, 180, 30);
+
+        jLabel11.setFont(new java.awt.Font("Myanmar Text", 1, 13)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("Total bayar  *Rp");
+        jPanel2.add(jLabel11);
+        jLabel11.setBounds(55, 251, 100, 25);
+
+        tTotal.setEditable(false);
+        tTotal.setBackground(new java.awt.Color(241, 241, 241));
+        tTotal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tTotalActionPerformed(evt);
+            }
+        });
+        tTotal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tTotalKeyReleased(evt);
+            }
+        });
+        jPanel2.add(tTotal);
+        tTotal.setBounds(191, 249, 180, 22);
+
+        btEdit.setBackground(new java.awt.Color(255, 171, 3));
+        btEdit.setFont(new java.awt.Font("Century Gothic", 1, 11)); // NOI18N
+        btEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btEdit.setText("Edit");
+        btEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEditActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btEdit);
+        btEdit.setBounds(210, 300, 100, 30);
+
+        btSimpan.setBackground(new java.awt.Color(56, 229, 77));
+        btSimpan.setFont(new java.awt.Font("Century Gothic", 1, 11)); // NOI18N
+        btSimpan.setForeground(new java.awt.Color(255, 255, 255));
+        btSimpan.setText("Simpan");
+        btSimpan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btSimpanMouseClicked(evt);
+            }
+        });
+        btSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSimpanActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btSimpan);
+        btSimpan.setBounds(320, 300, 100, 30);
+
+        btHapus.setBackground(new java.awt.Color(255, 51, 51));
+        btHapus.setFont(new java.awt.Font("Century Gothic", 1, 11)); // NOI18N
+        btHapus.setForeground(new java.awt.Color(255, 255, 255));
+        btHapus.setText("Hapus");
+        btHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btHapusActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btHapus);
+        btHapus.setBounds(90, 300, 100, 30);
+
+        bg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resource/lb_logo.jpg"))); // NOI18N
+        bg.setText("jLabel12");
+        jPanel2.add(bg);
+        bg.setBounds(0, 50, 720, 450);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBackActionPerformed
+        new menu().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btBackActionPerformed
+
+    private void btSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSimpanActionPerformed
+        save();
+    }//GEN-LAST:event_btSimpanActionPerformed
+
+    private void btEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditActionPerformed
+        loadData();
+    }//GEN-LAST:event_btEditActionPerformed
+
+    private void btHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btHapusActionPerformed
+        int select = tabelPC.getSelectedRowCount();
+        if (select > 0) {
+            int pilihan = JOptionPane.NO_OPTION;
+            pilihan = JOptionPane.showConfirmDialog(rootPane, "Hapus data?", "INFO", JOptionPane.YES_NO_OPTION);
+            if (pilihan == JOptionPane.YES_OPTION) {
+                int row = tabelPC.getSelectedRow();
+                String No = (tabelPC.getValueAt(row, 0).toString());
+                pci.delete(Integer.parseInt(No));
+                clear();
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Data belum dipilih!");
+        }
+    }//GEN-LAST:event_btHapusActionPerformed
+
+    private void tWaktuKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tWaktuKeyReleased
+        total();
+    }//GEN-LAST:event_tWaktuKeyReleased
+
+    private void cbPCItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPCItemStateChanged
+        biaya();
+    }//GEN-LAST:event_cbPCItemStateChanged
+
+    private void tBiayaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tBiayaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tBiayaActionPerformed
+
+    private void cbPCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPCActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbPCActionPerformed
+
+    private void btSimpanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSimpanMouseClicked
+
+    }//GEN-LAST:event_btSimpanMouseClicked
+
+    private void tabelPCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelPCMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tabelPCMouseClicked
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formWindowOpened
+
+    private void tUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tUsernameActionPerformed
+
+    private void tTotalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tTotalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tTotalActionPerformed
+
+    private void tTotalKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tTotalKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tTotalKeyReleased
+
+    private void tWaktuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tWaktuActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tWaktuActionPerformed
+
+    private void tWaktuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tWaktuKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tWaktuKeyPressed
+
+    private void tWaktuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tWaktuKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_tWaktuKeyTyped
+
+    private void tUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tUsernameKeyPressed
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        
+        if(Character.isLetter(c)||Character.isWhitespace(c)||Character.isISOControl(c)){
+            tUsername.setEditable(true);
+        }else{
+            tUsername.setEditable(false);
+        }
+    }//GEN-LAST:event_tUsernameKeyPressed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(PC_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(PC_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(PC_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(PC_view.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    new PC_view().setVisible(true);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(PC_view.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PC_view.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bg;
+    private javax.swing.JButton btBack;
+    private javax.swing.JButton btEdit;
+    private javax.swing.JButton btHapus;
+    private javax.swing.JButton btSimpan;
+    private javax.swing.JComboBox<String> cbPC;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField tBiaya;
+    private javax.swing.JTextField tTotal;
+    private javax.swing.JTextField tUsername;
+    private javax.swing.JTextField tWaktu;
+    private javax.swing.JTable tabelPC;
+    // End of variables declaration//GEN-END:variables
+}
